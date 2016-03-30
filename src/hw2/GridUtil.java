@@ -135,7 +135,7 @@ public class GridUtil
 		  {
 			  if(!grid[i][j].isMine())
 			  {
-				  grid[i][j].setCount(0);//reset count incase of bad data
+				  //grid[i][j].setCount(0);//reset count incase of bad data
 				  grid[i][j].setCount(countNeighboringMines(grid, i, j));
 			  }
 		  }
@@ -255,7 +255,7 @@ public class GridUtil
 	  {
 		  for(j = 0; j < grid[i].length; j++)
 		  {
-			  if(grid[i][j].isMine())
+			  if(!grid[i][j].isMine())
 			  {
 				  if(grid[i][j].getStatus().toString() == "HIDDEN")
 				  {

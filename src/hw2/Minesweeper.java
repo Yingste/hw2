@@ -5,6 +5,7 @@ import java.util.Random;
 
 import api.Cell;
 import api.CellObserver;
+import api.Mark;
 import api.Status;
 
 /**
@@ -15,6 +16,7 @@ public class Minesweeper
 	private String[]initMine;
 	private Cell[][] grid2;
 	private Boolean gameState = true;
+	private int cCount = 0;
   
   /**
    * Constructs an instance of the game using the given array
@@ -58,7 +60,7 @@ public class Minesweeper
 	  System.out.println(columns);
 	  System.out.println(numberOfMines);
 	  System.out.println(givenRandom);
-	  
+	  //TODO
   }
   
   /**
@@ -71,8 +73,8 @@ public class Minesweeper
    */
   public int getClicks()
   {
-    // TODO
-    return 0;
+    
+    return cCount;
   }
   
   /**
@@ -83,8 +85,8 @@ public class Minesweeper
    */
   public int getNumMines()
   {
-    // TODO
-    return 0;
+    
+    return GridUtil.countAllMines(grid2);
   }
   
   /**
@@ -94,8 +96,8 @@ public class Minesweeper
    */
   public int getNumFlags()
   {
-    // TODO
-    return 0;
+    
+    return GridUtil.countAllFlags(grid2);
   }
   
   /**
@@ -105,7 +107,7 @@ public class Minesweeper
    */
   public int getRows()
   {
-    // TODO
+    
     return grid2.length;
   }
   
@@ -116,7 +118,7 @@ public class Minesweeper
    */
   public int getColumns()
   {
-    // TODO
+    
     return grid2[0].length;
   }
   
@@ -151,7 +153,42 @@ public class Minesweeper
   
   public String[] getGridAsStringArray(boolean revealAll)
   {
-    // TODO
+	  String[] ret = new String[grid2.length];
+	    for (int row = 0; row < grid2.length; row += 1)
+	    {
+	      String current = "";
+	      for (int col = 0; col < grid2[0].length; col += 1)
+	      {
+	        Cell c = grid2[row][col];
+	        if (c.getStatus() == Status.HIDDEN && !revealAll)
+	        {
+	          if (c.getMark() == Mark.FLAG)
+	          {
+	            current += "f";
+	          }
+	          else if (c.getMark() == Mark.QUESTION_MARK)
+	          {
+	            current += "?";          
+	          }
+	          else
+	          {
+	            current += "-";
+	          }
+	        }
+	        else
+	        {
+	          if (c.isMine())
+	          {
+	            current += 'x';
+	          }
+	          else
+	          {
+	            current += "" + c.getCount();
+	          }
+	        }
+	      }
+	      ret[row] = current;
+	    }
     return null;
   }
   
@@ -196,7 +233,17 @@ public class Minesweeper
    */
   public void toggleMark(int row, int col)
   {
-    // TODO
+	  if(grid2[row][col].getMark() == Mark.NONE)
+	  {
+		  grid2[row][col].setMark(Mark.FLAG);
+	  }else if(grid2[row][col].getMark() == Mark.FLAG)
+	  {
+		  grid2[row][col].setMark(Mark.QUESTION_MARK);
+	  }else
+	  {
+		  grid2[row][col].setMark(Mark.NONE);
+	  }
+	  
   }
   
   /**
@@ -219,6 +266,7 @@ public class Minesweeper
   {
 	  if(!isOver())//if game is playable
 	  {
+		  cCount ++;
 		  grid2[row][col].setStatus(Status.REVEALED);
 		  if (grid2[row][col].isMine())
 		  {
@@ -226,6 +274,11 @@ public class Minesweeper
 		  }else if(grid2[row][col].getCount() == 0)
 		  {
 			  GridUtil.clearRegion(grid2, row, col, getHistory());
+		  }
+		  System.out.println(!gameState);
+		  if(isWon())
+		  {
+			  endGame();
 		  }
 	  }
 	  
@@ -238,8 +291,8 @@ public class Minesweeper
    */
   public boolean isWon()
   {
-    // TODO
-    return false;
+    
+    return GridUtil.areAllCellsRevealed(grid2);
   }
   
   /**
@@ -263,7 +316,18 @@ public class Minesweeper
    */
   public void setObserver(CellObserver observer)
   {
-    // TODO
+	  int i  = 0;
+	  int j = 0;
+	  
+	  for(i = 0; i < grid2.length; i ++)
+	  {
+		  for(j = 0; j < grid2[i].length; j++)
+		  {
+			 grid2[i][j].setObserver(observer);
+		  }
+		  
+		  
+	  }
   }
   
   private void endGame()
