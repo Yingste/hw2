@@ -5,6 +5,7 @@ import java.util.Random;
 
 import api.Cell;
 import api.CellObserver;
+import api.Status;
 
 /**
  * This class encapsulates the state of a minesweeper game.
@@ -12,6 +13,8 @@ import api.CellObserver;
 public class Minesweeper
 {
 	private String[]initMine;
+	private Cell[][] grid2;
+	private Boolean gameState = true;
   
   /**
    * Constructs an instance of the game using the given array
@@ -29,11 +32,9 @@ public class Minesweeper
     // TODO
 	  initMine = descriptor;
 	  int i = 0;
-	  for (i = 0; i < descriptor.length; i++)
-	  {
-		  //System.out.println(descriptor[i]);
-	  }
-	  
+	  grid2 = GridUtil.createFromStringArray(descriptor);
+	  GridUtil.initCounts(grid2);
+	    String[] actual = GridUtil.convertToStringArray(grid2, true);
   }
   
   /**
@@ -105,7 +106,7 @@ public class Minesweeper
   public int getRows()
   {
     // TODO
-    return 0;
+    return grid2.length;
   }
   
   /**
@@ -116,7 +117,7 @@ public class Minesweeper
   public int getColumns()
   {
     // TODO
-    return 0;
+    return grid2[0].length;
   }
   
   /**
@@ -134,8 +135,8 @@ public class Minesweeper
    */
   public Cell getCell(int row, int col)
   {
-    // TODO
-    return null;
+   
+    return grid2[row][col];
   }
   
   /**
@@ -179,8 +180,8 @@ public class Minesweeper
    */
   public boolean isOver()
   {
-    // TODO
-    return false;
+    
+    return !gameState;
   }
   
   /**
@@ -216,7 +217,18 @@ public class Minesweeper
    */
   public void play(int row, int col)
   {
-    // TODO
+	  if(!isOver())//if game is playable
+	  {
+		  grid2[row][col].setStatus(Status.REVEALED);
+		  if (grid2[row][col].isMine())
+		  {
+			  endGame();
+		  }else if(grid2[row][col].getCount() == 0)
+		  {
+			  GridUtil.clearRegion(grid2, row, col, getHistory());
+		  }
+	  }
+	  
   }
   
   /**
@@ -253,4 +265,11 @@ public class Minesweeper
   {
     // TODO
   }
+  
+  private void endGame()
+  {
+	  gameState = false;
+  }
+  
+  
 }
