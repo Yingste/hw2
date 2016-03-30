@@ -142,6 +142,7 @@ public class GridUtil
 		  
 		  
 	  }
+	  //System.out.println(grid[5][4].getCount());
   }
 
   /**
@@ -160,7 +161,7 @@ public class GridUtil
   {
 	  int count = 0;
 	  if(givenRow >= 1)
-	  {
+	  { 
 		  if(grid[givenRow - 1][givenCol].isMine())
 		  {
 			  count++;
@@ -219,7 +220,7 @@ public class GridUtil
 		  }
 		  
 	  }
-	  if(givenCol < grid.length - 1)
+	  if(givenCol < grid[givenRow].length - 1)
 	  {
 		  //System.out.println(grid.length);
 		  //System.out.println(givenCol);
@@ -430,7 +431,7 @@ public class GridUtil
 		  }
 		  
 	  }
-	  if(givenCol < grid.length - 1)
+	  if(givenCol < grid[givenRow].length - 1)
 	  {
 		  //System.out.println(grid.length);
 		  //System.out.println(givenCol);
@@ -633,7 +634,7 @@ public class GridUtil
 		  }
 		  
 	  }
-	  if(col < grid.length - 1)
+	  if(col < grid[row].length - 1)
 	  {
 		  if(!grid[row][col + 1].isMine())
 		  {
@@ -681,113 +682,117 @@ public class GridUtil
    */
   private static void clearq(Cell[][] grid)
   {
-	  int row = 0;
-	  int col = 0;
-	  Scanner scan = new Scanner(que.get(0));
-	  row = scan.nextInt();//get the row from que
-	  col = scan.nextInt();//get the col from que
-	  done.add(que.get(0));//copy from que to done 
-	  que.remove(0);//remove que
-	  
-	  if(row >= 1)// check up
+	  if(que.size() > 0)
 	  {
-		  if(!grid[row - 1][col].isMine())
+		  int row = 0;
+		  int col = 0;
+		  Scanner scan = new Scanner(que.get(0));
+		  row = scan.nextInt();//get the row from que
+		  col = scan.nextInt();//get the col from que
+		  done.add(que.get(0));//copy from que to done 
+		  que.remove(0);//remove que
+		  
+		  if(row >= 1)// check up
 		  {
-			  if(grid[row - 1][col].getCount() == 0)
+			  if(!grid[row - 1][col].isMine())
 			  {
-				  Boolean canAdd = true;
-				  if(done.contains((row - 1) + " " + col))
+				  if(grid[row - 1][col].getCount() == 0)
 				  {
-					  canAdd = false;
+					  Boolean canAdd = true;
+					  if(done.contains((row - 1) + " " + col))
+					  {
+						  canAdd = false;
+					  }
+					  if(que.contains((row - 1) + " " + col))
+					  {
+						  canAdd = false;
+					  }
+					  if(canAdd)
+					  {
+						  que.add((row - 1) + " " + col);
+					  }
 				  }
-				  if(que.contains((row - 1) + " " + col))
-				  {
-					  canAdd = false;
-				  }
-				  if(canAdd)
-				  {
-					  que.add((row - 1) + " " + col);
-				  }
+				  grid[row - 1][col].setStatus(Status.REVEALED);
+				  
 			  }
-			  grid[row - 1][col].setStatus(Status.REVEALED);
-			  
 		  }
-	  }
-	  if(row < grid.length - 1)//check down
-	  {
-		  if(!grid[row + 1][col].isMine())
+		  if(row < grid.length - 1)//check down
 		  {
-			  if(grid[row + 1][col].getCount() == 0)
+			  if(!grid[row + 1][col].isMine())
 			  {
-				  Boolean canAdd = true;
-				  if(done.contains((row + 1) + " " + col))
+				  if(grid[row + 1][col].getCount() == 0)
 				  {
-					  canAdd = false;
+					  Boolean canAdd = true;
+					  if(done.contains((row + 1) + " " + col))
+					  {
+						  canAdd = false;
+					  }
+					  if(que.contains((row + 1) + " " + col))
+					  {
+						  canAdd = false;
+					  }
+					  if(canAdd)
+					  {
+						  que.add((row + 1) + " " + col);
+					  }
 				  }
-				  if(que.contains((row + 1) + " " + col))
-				  {
-					  canAdd = false;
-				  }
-				  if(canAdd)
-				  {
-					  que.add((row + 1) + " " + col);
-				  }
+				  grid[row + 1][col].setStatus(Status.REVEALED);
 			  }
-			  grid[row + 1][col].setStatus(Status.REVEALED);
-		  }
-	  }
-	  
-	  
-	  
-	  if(col >= 1)//check left
-	  {
-		  if(!grid[row][col - 1].isMine())
-		  {
-			  
-			  if(grid[row][col - 1].getCount() == 0)
-			  {
-				  Boolean canAdd = true;
-				  if(done.contains((row) + " " + (col - 1)))
-				  {
-					  canAdd = false;
-				  }
-				  if(que.contains((row) + " " + (col - 1)))
-				  {
-					  canAdd = false;
-				  }
-				  if(canAdd)
-				  {
-					  que.add((row) + " " + (col - 1));
-				  }
-			  }
-			  grid[row][col - 1].setStatus(Status.REVEALED);
 		  }
 		  
-	  }
-	  if(col < grid.length - 1)
-	  {
-		  if(!grid[row][col + 1].isMine())
+		  
+		  
+		  if(col >= 1)//check left
 		  {
-			  if(grid[row][col + 1].getCount() == 0)
+			  if(!grid[row][col - 1].isMine())
 			  {
-				  Boolean canAdd = true;
-				  if(done.contains((row) + " " + (col + 1)))
+				  
+				  if(grid[row][col - 1].getCount() == 0)
 				  {
-					  canAdd = false;
+					  Boolean canAdd = true;
+					  if(done.contains((row) + " " + (col - 1)))
+					  {
+						  canAdd = false;
+					  }
+					  if(que.contains((row) + " " + (col - 1)))
+					  {
+						  canAdd = false;
+					  }
+					  if(canAdd)
+					  {
+						  que.add((row) + " " + (col - 1));
+					  }
 				  }
-				  if(que.contains((row) + " " + (col + 1)))
-				  {
-					  canAdd = false;
-				  }
-				  if(canAdd)
-				  {
-					  que.add((row) + " " + (col + 1));
-				  }
+				  grid[row][col - 1].setStatus(Status.REVEALED);
 			  }
-			  grid[row][col + 1].setStatus(Status.REVEALED);
+			  
 		  }
+		  if(col < grid[row].length - 1)
+		  {
+			  if(!grid[row][col + 1].isMine())
+			  {
+				  if(grid[row][col + 1].getCount() == 0)
+				  {
+					  Boolean canAdd = true;
+					  if(done.contains((row) + " " + (col + 1)))
+					  {
+						  canAdd = false;
+					  }
+					  if(que.contains((row) + " " + (col + 1)))
+					  {
+						  canAdd = false;
+					  }
+					  if(canAdd)
+					  {
+						  que.add((row) + " " + (col + 1));
+					  }
+				  }
+				  grid[row][col + 1].setStatus(Status.REVEALED);
+			  }
+		  }
+		  clearq(grid);//runs the tasks on the que
 	  }
-	  clearq(grid);//runs the tasks on the que
+	  
 	  
 			  
   }
