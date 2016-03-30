@@ -1,6 +1,7 @@
 
 package hw2;
 
+import java.awt.List;
 import java.util.ArrayList;
 
 import api.Cell;
@@ -14,6 +15,8 @@ import api.Status;
  */
 public class GridUtil
 {
+	private static ArrayList<String> que = new ArrayList<String>();
+	private static ArrayList<String> done = new ArrayList<String>();
   /**
    * Marker character for initializing a 2D array of cells from
    * an array of Strings.
@@ -540,8 +543,9 @@ public class GridUtil
    */
   public static void clearRegion(Cell[][] grid, int row, int col, ArrayList<Cell> history)
   {
-	  int[][] que = new int[2][];
-	  int[][] done = new int[2][];
+	  
+	  done.add(row + "," + col);//store the given values as done.
+	  
     // TODO - clear the whole region and its boundary
     Cell c = grid[row][col];
     if (c.getCount() == 0)
@@ -553,48 +557,112 @@ public class GridUtil
       }
     }
     
-    if(row >= 1)
+    if(row >= 1)// check up
 	  {
 		  if(!grid[row - 1][col].isMine())
 		  {
 			  if(grid[row - 1][col].getCount() == 0)
 			  {
-				  int i = 0;
-				  for(i = 0; i < done[0].length; i++)
+				  Boolean canAdd = true;
+				  if(done.contains((row - 1) + "," + col))
 				  {
-					  
+					  canAdd = false;
+				  }
+				  if(que.contains((row - 1) + "," + col))
+				  {
+					  canAdd = false;
+				  }
+				  if(canAdd)
+				  {
+					  que.add((row - 1) + "," + col);
 				  }
 			  }
+			  grid[row - 1][col].setStatus(Status.REVEALED);
 			  
 		  }
 	  }
-	  if(row < grid.length - 1)
+	  if(row < grid.length - 1)//check down
 	  {
-		  if(grid[row + 1][col].isMine())
+		  if(!grid[row + 1][col].isMine())
 		  {
-			  
+			  if(grid[row + 1][col].getCount() == 0)
+			  {
+				  Boolean canAdd = true;
+				  if(done.contains((row + 1) + "," + col))
+				  {
+					  canAdd = false;
+				  }
+				  if(que.contains((row + 1) + "," + col))
+				  {
+					  canAdd = false;
+				  }
+				  if(canAdd)
+				  {
+					  que.add((row + 1) + "," + col);
+				  }
+			  }
+			  grid[row + 1][col].setStatus(Status.REVEALED);
 		  }
 	  }
 	  
 	  
 	  
-	  if(col >= 1)
+	  if(col >= 1)//check left
 	  {
-		  if(grid[row][col - 1].isMine())
+		  if(!grid[row][col - 1].isMine())
 		  {
 			  
-			  
+			  if(grid[row][col - 1].getCount() == 0)
+			  {
+				  Boolean canAdd = true;
+				  if(done.contains((row) + "," + (col - 1)))
+				  {
+					  canAdd = false;
+				  }
+				  if(que.contains((row) + "," + (col - 1)))
+				  {
+					  canAdd = false;
+				  }
+				  if(canAdd)
+				  {
+					  que.add((row) + "," + (col - 1));
+				  }
+			  }
+			  grid[row][col - 1].setStatus(Status.REVEALED);
 		  }
 		  
 	  }
 	  if(col < grid.length - 1)
 	  {
-		  if(grid[row][col + 1].isMine())
+		  if(!grid[row][col + 1].isMine())
 		  {
-			  
+			  if(grid[row][col + 1].getCount() == 0)
+			  {
+				  Boolean canAdd = true;
+				  if(done.contains((row) + "," + (col + 1)))
+				  {
+					  canAdd = false;
+				  }
+				  if(que.contains((row) + "," + (col + 1)))
+				  {
+					  canAdd = false;
+				  }
+				  if(canAdd)
+				  {
+					  que.add((row) + "," + (col + 1));
+				  }
+			  }
+			  grid[row][col + 1].setStatus(Status.REVEALED);
 		  }
 	  }
-    
+	  clearq();//runs the tasks on the que
   }
+  
+  private static void clearq()
+  {
+	  
+  }
+  
+  
 
 }
