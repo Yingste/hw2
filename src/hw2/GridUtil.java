@@ -3,6 +3,7 @@ package hw2;
 
 import java.awt.List;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 import api.Cell;
 import api.Mark;
@@ -544,7 +545,7 @@ public class GridUtil
   public static void clearRegion(Cell[][] grid, int row, int col, ArrayList<Cell> history)
   {
 	  
-	  done.add(row + "," + col);//store the given values as done.
+	  done.add(row + " " + col);//store the given values as done.
 	  
     // TODO - clear the whole region and its boundary
     Cell c = grid[row][col];
@@ -564,17 +565,17 @@ public class GridUtil
 			  if(grid[row - 1][col].getCount() == 0)
 			  {
 				  Boolean canAdd = true;
-				  if(done.contains((row - 1) + "," + col))
+				  if(done.contains((row - 1) + " " + col))
 				  {
 					  canAdd = false;
 				  }
-				  if(que.contains((row - 1) + "," + col))
+				  if(que.contains((row - 1) + " " + col))
 				  {
 					  canAdd = false;
 				  }
 				  if(canAdd)
 				  {
-					  que.add((row - 1) + "," + col);
+					  que.add((row - 1) + " " + col);
 				  }
 			  }
 			  grid[row - 1][col].setStatus(Status.REVEALED);
@@ -588,17 +589,17 @@ public class GridUtil
 			  if(grid[row + 1][col].getCount() == 0)
 			  {
 				  Boolean canAdd = true;
-				  if(done.contains((row + 1) + "," + col))
+				  if(done.contains((row + 1) + " " + col))
 				  {
 					  canAdd = false;
 				  }
-				  if(que.contains((row + 1) + "," + col))
+				  if(que.contains((row + 1) + " " + col))
 				  {
 					  canAdd = false;
 				  }
 				  if(canAdd)
 				  {
-					  que.add((row + 1) + "," + col);
+					  que.add((row + 1) + " " + col);
 				  }
 			  }
 			  grid[row + 1][col].setStatus(Status.REVEALED);
@@ -615,17 +616,17 @@ public class GridUtil
 			  if(grid[row][col - 1].getCount() == 0)
 			  {
 				  Boolean canAdd = true;
-				  if(done.contains((row) + "," + (col - 1)))
+				  if(done.contains((row) + " " + (col - 1)))
 				  {
 					  canAdd = false;
 				  }
-				  if(que.contains((row) + "," + (col - 1)))
+				  if(que.contains((row) + " " + (col - 1)))
 				  {
 					  canAdd = false;
 				  }
 				  if(canAdd)
 				  {
-					  que.add((row) + "," + (col - 1));
+					  que.add((row) + " " + (col - 1));
 				  }
 			  }
 			  grid[row][col - 1].setStatus(Status.REVEALED);
@@ -639,28 +640,156 @@ public class GridUtil
 			  if(grid[row][col + 1].getCount() == 0)
 			  {
 				  Boolean canAdd = true;
-				  if(done.contains((row) + "," + (col + 1)))
+				  if(done.contains((row) + " " + (col + 1)))
 				  {
 					  canAdd = false;
 				  }
-				  if(que.contains((row) + "," + (col + 1)))
+				  if(que.contains((row) + " " + (col + 1)))
 				  {
 					  canAdd = false;
 				  }
 				  if(canAdd)
 				  {
-					  que.add((row) + "," + (col + 1));
+					  que.add((row) + " " + (col + 1));
 				  }
 			  }
 			  grid[row][col + 1].setStatus(Status.REVEALED);
 		  }
 	  }
-	  clearq();//runs the tasks on the que
+	  clearq(grid);//runs the tasks on the que
   }
+
   
-  private static void clearq()
+  /**
+   * Helper for "flood fill" algorithm to reveal a region of 
+   * all reachable cells with count zero, 
+   * plus the nonzero cells at the boundary of the region, starting at
+   * the given position. The region does not include cells with count zero
+   * that are only connected diagonally.  If the cell at the given position does not have 
+   * count 0, this method does nothing.  If the given <code>ArrayList</code>
+   * is non-null, all revealed cells are added to the list, in the order in which
+   * they are revealed.
+   * <p>
+   * See the document:<br>
+   * <a href="http://web.cs.iastate.edu/~cs227/homework/hw2/clearRegion.pdf">
+   * http://web.cs.iastate.edu/~cs227/homework/hw2/clearRegion.pdf</a><br>
+   * for details.
+   * 
+   * @param grid
+   *   2D array of cells
+   *   
+   */
+  private static void clearq(Cell[][] grid)
   {
+	  int row = 0;
+	  int col = 0;
+	  Scanner scan = new Scanner(que.get(0));
+	  row = scan.nextInt();//get the row from que
+	  col = scan.nextInt();//get the col from que
+	  done.add(que.get(0));//copy from que to done 
+	  que.remove(0);//remove que
 	  
+	  if(row >= 1)// check up
+	  {
+		  if(!grid[row - 1][col].isMine())
+		  {
+			  if(grid[row - 1][col].getCount() == 0)
+			  {
+				  Boolean canAdd = true;
+				  if(done.contains((row - 1) + " " + col))
+				  {
+					  canAdd = false;
+				  }
+				  if(que.contains((row - 1) + " " + col))
+				  {
+					  canAdd = false;
+				  }
+				  if(canAdd)
+				  {
+					  que.add((row - 1) + " " + col);
+				  }
+			  }
+			  grid[row - 1][col].setStatus(Status.REVEALED);
+			  
+		  }
+	  }
+	  if(row < grid.length - 1)//check down
+	  {
+		  if(!grid[row + 1][col].isMine())
+		  {
+			  if(grid[row + 1][col].getCount() == 0)
+			  {
+				  Boolean canAdd = true;
+				  if(done.contains((row + 1) + " " + col))
+				  {
+					  canAdd = false;
+				  }
+				  if(que.contains((row + 1) + " " + col))
+				  {
+					  canAdd = false;
+				  }
+				  if(canAdd)
+				  {
+					  que.add((row + 1) + " " + col);
+				  }
+			  }
+			  grid[row + 1][col].setStatus(Status.REVEALED);
+		  }
+	  }
+	  
+	  
+	  
+	  if(col >= 1)//check left
+	  {
+		  if(!grid[row][col - 1].isMine())
+		  {
+			  
+			  if(grid[row][col - 1].getCount() == 0)
+			  {
+				  Boolean canAdd = true;
+				  if(done.contains((row) + " " + (col - 1)))
+				  {
+					  canAdd = false;
+				  }
+				  if(que.contains((row) + " " + (col - 1)))
+				  {
+					  canAdd = false;
+				  }
+				  if(canAdd)
+				  {
+					  que.add((row) + " " + (col - 1));
+				  }
+			  }
+			  grid[row][col - 1].setStatus(Status.REVEALED);
+		  }
+		  
+	  }
+	  if(col < grid.length - 1)
+	  {
+		  if(!grid[row][col + 1].isMine())
+		  {
+			  if(grid[row][col + 1].getCount() == 0)
+			  {
+				  Boolean canAdd = true;
+				  if(done.contains((row) + " " + (col + 1)))
+				  {
+					  canAdd = false;
+				  }
+				  if(que.contains((row) + " " + (col + 1)))
+				  {
+					  canAdd = false;
+				  }
+				  if(canAdd)
+				  {
+					  que.add((row) + " " + (col + 1));
+				  }
+			  }
+			  grid[row][col + 1].setStatus(Status.REVEALED);
+		  }
+	  }
+	  clearq(grid);//runs the tasks on the que
+	  
+			  
   }
   
   
