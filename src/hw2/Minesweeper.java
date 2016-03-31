@@ -17,6 +17,7 @@ public class Minesweeper
 	private Cell[][] grid2;
 	private Boolean gameState = true;
 	private int cCount = 0;
+	private static ArrayList<Cell> history = new ArrayList<Cell>();
   
   /**
    * Constructs an instance of the game using the given array
@@ -203,8 +204,8 @@ public class Minesweeper
    */
   public ArrayList<Cell> getHistory()
   {
-    // TODO
-    return null;
+    
+    return history;
   }
   
   
@@ -264,9 +265,15 @@ public class Minesweeper
    */
   public void play(int row, int col)
   {
+	  if ((cCount == 0) && (grid2[row][col].isMine()))
+	  {
+		  grid2[row][col].setIsMine(false);
+		  GridUtil.initCounts(grid2);
+	  }
 	  if(!isOver())//if game is playable
 	  {
 		  cCount ++;
+		  getHistory().add(grid2[row][col]);
 		  grid2[row][col].setStatus(Status.REVEALED);
 		  if (grid2[row][col].isMine())
 		  {
@@ -304,7 +311,7 @@ public class Minesweeper
    */
   public void hint()
   {
-    // TODO
+	//TODO
   }
   
   

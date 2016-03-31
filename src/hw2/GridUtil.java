@@ -135,7 +135,7 @@ public class GridUtil
 		  {
 			  if(!grid[i][j].isMine())
 			  {
-				  //grid[i][j].setCount(0);//reset count incase of bad data
+				  grid[i][j].setCount(0);//reset count incase of bad data
 				  grid[i][j].setCount(countNeighboringMines(grid, i, j));
 			  }
 		  }
@@ -174,7 +174,8 @@ public class GridUtil
 			  {
 				  count++;
 			  }
-		  }else if(givenCol >= 1)
+		  }
+		  if(givenCol >= 1)
 		  {
 			  if(grid[givenRow - 1][givenCol - 1].isMine())
 			  {
@@ -200,7 +201,8 @@ public class GridUtil
 			  {
 				  count++;
 			  }
-		  }else if(givenCol >= 1)
+		  }
+		  if(givenCol >= 1)
 		  {
 			  if(grid[givenRow + 1][givenCol - 1].isMine())
 			  {
