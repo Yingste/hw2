@@ -581,6 +581,7 @@ public class GridUtil
 					  que.add((row - 1) + " " + col);
 				  }
 			  }
+			  
 			  grid[row - 1][col].setStatus(Status.REVEALED);
 			  
 		  }
@@ -636,7 +637,7 @@ public class GridUtil
 		  }
 		  
 	  }
-	  if(col < grid[row].length - 1)
+	  if(col < grid[row].length - 1)//check right
 	  {
 		  if(!grid[row][col + 1].isMine())
 		  {
@@ -659,6 +660,52 @@ public class GridUtil
 			  grid[row][col + 1].setStatus(Status.REVEALED);
 		  }
 	  }
+	  
+	  //check up right 
+	  //check up left 
+	  if (row >= 1)
+	  {
+		  if (col < grid[row].length - 1)
+		  {
+			  grid[row - 1][col + 1].setStatus(Status.REVEALED);
+		  
+		  }
+		  
+		  if (col >= 1)
+		  {
+		  
+			  grid[row - 1][col - 1].setStatus(Status.REVEALED);
+			  
+		  }
+		  
+	  }
+	  
+	  
+	  //check down right 
+	  //check down left
+	  if (row < grid.length - 1)
+	  {
+		  if (col < grid[row].length - 1)
+		  {
+			  
+				  
+				  grid[row + 1][col + 1].setStatus(Status.REVEALED);
+			  
+		  }
+		  
+		  if (col >= 1)
+		  {
+			  
+				  grid[row + 1][col - 1].setStatus(Status.REVEALED);
+				  
+			  
+		  }
+		  
+	  }
+	  
+	  
+	  
+	  
 	  clearq(grid);//runs the tasks on the que
   }
 
@@ -792,6 +839,51 @@ public class GridUtil
 				  grid[row][col + 1].setStatus(Status.REVEALED);
 			  }
 		  }
+		  
+		  
+		//check up right 
+		  //check up left 
+		  if (row >= 1)
+		  {
+			  if (col < grid[row].length - 1)
+			  {
+				  grid[row - 1][col + 1].setStatus(Status.REVEALED);
+			  
+			  }
+			  
+			  if (col >= 1)
+			  {
+			  
+				  grid[row - 1][col - 1].setStatus(Status.REVEALED);
+				  
+			  }
+			  
+		  }
+		  
+		  
+		  //check down right 
+		  //check down left
+		  if (row < grid.length - 1)
+		  {
+			  if (col < grid[row].length - 1)
+			  {
+				  
+					  
+					  grid[row + 1][col + 1].setStatus(Status.REVEALED);
+				  
+			  }
+			  
+			  if (col >= 1)
+			  {
+				  
+					  grid[row + 1][col - 1].setStatus(Status.REVEALED);
+					  
+				  
+			  }
+			  
+		  }
+		  
+		  
 		  clearq(grid);//runs the tasks on the que
 	  }
 	  
