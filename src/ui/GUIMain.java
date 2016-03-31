@@ -24,7 +24,9 @@ public class GUIMain
    */
   public static void main(String[] args)
   {
-    Minesweeper g = new Minesweeper(TextUI.GRID3);
+    Random a = new Random();
+	//Minesweeper g = new Minesweeper(TextUI.GRID3);
+    Minesweeper g = new Minesweeper(15, 15, 15, a );
     
     // Use a 200 ms delay when animating the flood fill algorithm.  
     // This has no effect unless the "Animate" check box is checked.

@@ -7,6 +7,7 @@ import api.Cell;
 import api.CellObserver;
 import api.Mark;
 import api.Status;
+import ui.TextUI;
 
 /**
  * This class encapsulates the state of a minesweeper game.
@@ -37,7 +38,7 @@ public class Minesweeper
 	  int i = 0;
 	  grid2 = GridUtil.createFromStringArray(descriptor);
 	  GridUtil.initCounts(grid2);
-	    String[] actual = GridUtil.convertToStringArray(grid2, true);
+	    
   }
   
   /**
@@ -57,11 +58,74 @@ public class Minesweeper
    */
   public Minesweeper(int rows, int columns, int numberOfMines, Random givenRandom)
   {
-	  System.out.println(rows);
-	  System.out.println(columns);
-	  System.out.println(numberOfMines);
-	  System.out.println(givenRandom);
-	  //TODO
+	 // System.out.println(rows);
+	 // System.out.println(columns);
+	 // System.out.println(numberOfMines);
+	  //System.out.println(givenRandom.nextInt(50));
+	  int i = 0;
+	  int k = 0;
+	  String[] sgrid = new String[rows];
+	  String temp = "";
+	  int count = numberOfMines;
+	  for(i = 0; i < rows  ; i++)
+	  {
+		  temp = "";
+		  for(k = 0; k < columns - 1; k++)
+		  {
+			  temp += "-";
+		  }
+		  sgrid[i] = temp;
+	  }
+	  
+	  
+	  while(count > 0)
+	  {
+		  for(i = 0; i < rows ; i ++)
+		  {
+			  for(k = 0; k < columns - 1; k ++)
+			  {
+				  if(givenRandom.nextInt(2000) > 25)
+				  {
+					  
+				  }else
+				  {
+					  if(count > 0)
+					  {
+						  if (sgrid[i].charAt(k) == '-')
+						  {
+							  count --;
+							  if (k > 0)
+							  {
+								  temp = sgrid[i].substring(0, k - 1) + 'x' + sgrid[i].substring(k);
+							  }else
+							  {
+								  temp = 'x' + sgrid[i].substring(k);
+							  }
+							  
+							  sgrid[i] = temp;
+							  //System.out.println(sgrid[i]);
+						  }
+					  }
+					  
+					  
+				  }
+					  
+			  }
+		  }
+	  }
+	  
+	  for (i = 0 ; i < sgrid.length - 1; i++)
+	  {
+		  
+		  //System.out.println(sgrid[i]);
+		  //System.out.println(TextUI.GRID3[i]);
+	  }
+	  //System.out.println(sgrid[14]);
+	  grid2 = GridUtil.createFromStringArray(sgrid);
+	  GridUtil.initCounts(grid2);
+	    
+	  
+	  //
   }
   
   /**
@@ -311,7 +375,16 @@ public class Minesweeper
    */
   public void hint()
   {
-	//TODO
+	  int i = 0;
+	for(i = history.size() - 1; i >= 0; i--)
+	{
+		if (!(GridUtil.findOneHiddenNeighbor(grid2, history.get(i).getRow(), history.get(i).getCol()) == null))
+		{
+			
+			grid2[history.get(i).getRow()][history.get(i).getCol()].setStatus(Status.REVEALED);
+			break;
+		}
+	}
   }
   
   
@@ -340,6 +413,7 @@ public class Minesweeper
   private void endGame()
   {
 	  gameState = false;
+	  GridUtil.revealAllMines(grid2);
   }
   
   
